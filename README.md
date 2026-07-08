@@ -103,10 +103,3 @@ directory.
   Required for the pipeline to run regardless of this setting: `OrphaCode`, `DisorderId`,
   `GeneSymbol`.
 
----
-
-## Notebooks
-
-`notebooks/merge.ipynb` is an example of a project-specific downstream analysis built on top of
-this pipeline's rawdump/merged output (e.g. joining an external gene list against Orphanet
-annotations) — it is not part of the automated pipeline and is not run by Snakemake.
