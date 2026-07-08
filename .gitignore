@@ -1,0 +1,24 @@
+# Orphanet XML source files (download separately — see sources.md)
+sources/*.xml
+sources/classifications/*.xml
+
+# Local test root used for development without touching config paths
+_local_root/
+
+# Snakemake internals
+.snakemake/
+
+# Claude Code
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter
+notebooks/
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store

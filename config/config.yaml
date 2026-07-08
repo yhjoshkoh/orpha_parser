@@ -1,0 +1,110 @@
+# Orphanet XML parser config
+# Input: Orphanet Scientific Knowledge XML
+# raw_dumps : XML -> CSV (Dumps entire field)
+# processed : merged and cleaned for downstream analyses
+
+
+# run_name = Orphanet release date: YYMMDD
+run_name: "260623"
+
+#===== ROOT =====
+ROOT: "/path/to/your/data/" # Base directory; Snakefile uses os.path.join(ROOT, run_name)
+
+# ===== INPUT =====
+inputs:
+  in_root : "sources" # XML root directory (except classifications) / os.path.join(ROOT,run_name,in_root)
+  classification_dir : "classifications"  # Classification XML directory under in_root / os.path.join(ROOT,run_name,in_root,classification_dir)
+
+# ===== OUTPUT =====
+outputs:
+  out_root: "results" # Output root name (not directly used) / os.path.join(ROOT,run_name,out_root)
+  rawdump_dir: "raw_dumps" # Raw dump CSV files / os.path.join(ROOT,run_name,out_root,rawdump_dir)
+  final_dir: "processed" # Final processed CSV files / os.path.join(ROOT,run_name,out_root,final_dir)
+
+# ===== SCRIPT DIRECTORY =====
+# Rule usage example:
+# shell: "python {config[script_dir]}/xxx.py -i {input.xml} -o {output.csv} > {log} 2>&1"
+script_dir: "/path/to/orpha_parser/scripts"
+
+# ===== LOG DIRECTORY =====
+# Optional setting
+# If not set: logs are saved to {out_root}/log
+# If set: logs are saved to os.path.join(ROOT, run_name, out_root, log_dir)
+# Directory is auto-created in rules/00_check.smk
+# log_dir:
+
+
+# ===== FINAL OUTPUT COLUMNS =====
+# Column order for processed output (except OMIM handling)
+# OMIM is split into:
+#   - OMIM_gene     (placed before GeneSymbol)
+#   - OMIM_disorder (placed before DisorderId)
+# Required columns for the pipeline to run:
+#   OrphaCode, DisorderId, GeneSymbol
+# If HEADERS_TO_KEEP is null/None:
+#   - all rawdump columns are merged (duplicates removed)
+#   - OMIM is still split, but column order follows source files
+# Comment out to disable
+HEADERS_TO_KEEP: "
+  OrphaCode
+  DisorderId
+  OMIM
+  DisorderName
+  DisorderType
+  DisorderGeneAssociationListCount
+  Ensembl
+  GeneSymbol
+  Synonyms
+  AssociationType
+  ClassificationPath
+  AverageAgeOfOnset
+  TypeOfInheritance
+  PrevalenceEntries
+  ExpertLink
+  "
+
+
+CLS_MAP:
+    "en_product3_146.xml"       : "cardiac_diseases"
+    "en_product3_147.xml"       : "developmental_anomalies_during_embryogenesis"
+    "en_product3_148.xml"       : "cardiac_malformations"
+    "en_product3_150.xml"       : "inborn_errors_of_metabolism"
+    "en_product3_152.xml"       : "gastroenterological_diseases"
+    "en_product3_156.xml"       : "genetic_diseases"
+    "en_product3_181.xml"       : "neurological_diseases"
+    "en_product3_182.xml"       : "abdominal_surgical_diseases"
+    "en_product3_183.xml"       : "hepatic_diseases"
+    "en_product3_184.xml"       : "respiratory_diseases"
+    "en_product3_185.xml"       : "urogenital_diseases"
+    "en_product3_186.xml"       : "surgical_thoracic_diseases"
+    "en_product3_187.xml"       : "skin_diseases"
+    "en_product3_188.xml"       : "renal_diseases"
+    "en_product3_189.xml"       : "ophthalmic_diseases"
+    "en_product3_193.xml"       : "endocrine_diseases"
+    "en_product3_194.xml"       : "haematological_diseases"
+    "en_product3_195.xml"       : "immunological_diseases"
+    "en_product3_196.xml"       : "systemic_and_rhumatological_diseases"
+    "en_product3_197.xml"       : "odontological_diseases"
+    "en_product3_198.xml"       : "circulatory_system_diseases"
+    "en_product3_199.xml"       : "bone_diseases"
+    "en_product3_200.xml"       : "otorhinolaryngological_diseases"
+    "en_product3_201.xml"       : "infertility"
+    "en_product3_202.xml"       : "neoplastic_diseases"
+    "en_product3_203.xml"       : "infectious_diseases"
+    "en_product3_204.xml"       : "diseases_due_to_toxic_effects"
+    "en_product3_205.xml"       : "gynaecological_and_obstetric_diseases"
+    "en_product3_209.xml"       : "surgical_maxillo-facial_diseases"
+    "en_product3_212.xml"       : "allergic_disease"
+    "en_product3_216.xml"       : "teratologic_disorders"
+    "en_product3_231.xml"       : "systemic_and_rheumatological_diseases_of_childhood"
+    "en_product3_233.xml"       : "transplant-related_diseases"
+    "en_product3_235.xml"       : "disorder_without_a_determined_diagnosis_after_full_investigation"
+
+
+XML_MAP:
+    "en_product1.xml"           : "alignment"
+    "en_product6.xml"           : "gene_disease_associations"
+    "en_product4.xml"           : "phenotypes"
+    "en_funct_consequences.xml" : "functional_consequences"
+    "en_product9_prev.xml"      : "epidemiology"
+    "en_product9_ages.xml"      : "natural_history"
