@@ -9,11 +9,8 @@ phenotype, epidemiology, natural-history, and functional-consequence data.
 
 ## Setup
 
-No `requirements.txt`/`environment.yml` is checked in yet — install directly:
-
 ```bash
-conda create -n orpha_parser -c conda-forge python=3.12 snakemake pandas
-conda activate orpha_parser
+pip install -r requirements.txt
 ```
 
 The parsers use only the Python standard library's `xml.etree.ElementTree` for XML parsing (no
